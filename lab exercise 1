@@ -1,0 +1,65 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "provenance": [],
+      "authorship_tag": "ABX9TyPm73VA2SNnAE1eBZRC9tG+",
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/suganthan-hub/Nature-Language-Processing/blob/main/lab%20exercise%201\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 2,
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "ohv5Hjbu0YTD",
+        "outputId": "84c69a70-0d2e-4377-8717-dfe6d522f6b9"
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Emails: ['student@gmail.com']\n",
+            "Phone Numbers: ['9876543210']\n",
+            "Words: ['My', 'email', 'is', 'student', 'gmail', 'com', 'and', 'my', 'number', 'is']\n"
+          ]
+        }
+      ],
+      "source": [
+        "import re\n",
+        "\n",
+        "text = \"My email is student@gmail.com and my number is 9876543210\"\n",
+        "\n",
+        "emails = re.findall(r'[\\w.-]+@[\\w.-]+\\.\\w+', text)\n",
+        "numbers = re.findall(r'\\d{10}', text)\n",
+        "words = re.findall(r'\\b[A-Za-z]+\\b', text)\n",
+        "\n",
+        "print(\"Emails:\", emails)\n",
+        "print(\"Phone Numbers:\", numbers)\n",
+        "print(\"Words:\", words)"
+      ]
+    }
+  ]
+}
