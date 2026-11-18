@@ -1,0 +1,67 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "provenance": [],
+      "authorship_tag": "ABX9TyMQZ02hKKSJ54tcQkOxse4p",
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/suganthan-hub/Nature-Language-Processing/blob/main/lab%20exercise%204\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 1,
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "aAvelIVi4UfN",
+        "outputId": "94ef4254-aca1-4591-d58c-b18a5d3a3276"
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "cat -> cats\n",
+            "box -> boxes\n",
+            "baby -> babies\n",
+            "dish -> dishes\n"
+          ]
+        }
+      ],
+      "source": [
+        " def plural(word):\n",
+        "    if word.endswith(('s', 'x', 'z', 'ch', 'sh')):\n",
+        "        return word + 'es'\n",
+        "    elif word.endswith('y') and word[-2] not in 'aeiou':\n",
+        "        return word[:-1] + 'ies'\n",
+        "    else:\n",
+        "        return word + 's'\n",
+        "\n",
+        "words = [\"cat\", \"box\", \"baby\", \"dish\"]\n",
+        "\n",
+        "for word in words:\n",
+        "    print(word, \"->\", plural(word))"
+      ]
+    }
+  ]
+}
