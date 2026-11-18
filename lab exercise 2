@@ -1,0 +1,72 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "provenance": [],
+      "authorship_tag": "ABX9TyMoraZEL858/sBwuUczlky6",
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/suganthan-hub/Nature-Language-Processing/blob/main/lab%20exercise%202\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 1,
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "3_iPS46e17jR",
+        "outputId": "555ac4ab-6c96-416c-a0f0-d0ab2d1cfea6"
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Enter a string: aaab\n",
+            "Accepted\n"
+          ]
+        }
+      ],
+      "source": [
+        "def automaton(s):\n",
+        "    state = 0\n",
+        "\n",
+        "    for ch in s:\n",
+        "        if state == 0:\n",
+        "            state = 1 if ch == 'a' else 0\n",
+        "        elif state == 1:\n",
+        "            state = 1 if ch == 'a' else 2\n",
+        "        elif state == 2:\n",
+        "            state = 1 if ch == 'a' else 0\n",
+        "\n",
+        "    return state == 2\n",
+        "\n",
+        "s = input(\"Enter a string: \")\n",
+        "\n",
+        "if automaton(s):\n",
+        "    print(\"Accepted\")\n",
+        "else:\n",
+        "    print(\"Rejected\")"
+      ]
+    }
+  ]
+}
