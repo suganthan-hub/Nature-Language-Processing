@@ -1,0 +1,432 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "provenance": [],
+      "authorship_tag": "ABX9TyNKAoYVcSitspcwcUdlSCVo",
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/suganthan-hub/Nature-Language-Processing/blob/main/lab%20exercise%205-14\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 1,
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "L-eVOEZyzhDV",
+        "outputId": "046bb619-f26e-4bde-f0cd-1bf1afdbf665"
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "running         -> run\n",
+            "runs            -> run\n",
+            "easily          -> easili\n",
+            "fairly          -> fairli\n",
+            "studies         -> studi\n",
+            "studying        -> studi\n",
+            "connected       -> connect\n",
+            "connections     -> connect\n"
+          ]
+        }
+      ],
+      "source": [
+        "from nltk.stem import PorterStemmer\n",
+        "\n",
+        "ps = PorterStemmer()\n",
+        "words = [\"running\", \"runs\", \"easily\", \"fairly\", \"studies\", \"studying\", \"connected\", \"connections\"]\n",
+        "\n",
+        "for w in words:\n",
+        "    print(f\"{w:<15} -> {ps.stem(w)}\")"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "import random\n",
+        "from collections import defaultdict\n",
+        "\n",
+        "corpus = \"the cat sat on the mat the cat ate the rat the dog chased the cat\".split()\n",
+        "bigrams = defaultdict(list)\n",
+        "\n",
+        "for w1, w2 in zip(corpus[:-1], corpus[1:]):\n",
+        "    bigrams[w1].append(w2)\n",
+        "\n",
+        "word = \"the\"\n",
+        "generated = [word]\n",
+        "for _ in range(10):\n",
+        "    next_words = bigrams.get(word, [\"the\"])\n",
+        "    word = random.choice(next_words)\n",
+        "    generated.append(word)\n",
+        "\n",
+        "print(\"Generated text:\", \" \".join(generated))"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "9BcHLBmz0IjE",
+        "outputId": "28dd3cc7-0abe-4698-ce95-568200340341"
+      },
+      "execution_count": 2,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Generated text: the dog chased the cat sat on the cat ate the\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "import nltk\n",
+        "\n",
+        "# Download the required NLTK resources\n",
+        "nltk.download('punkt_tab')\n",
+        "nltk.download('averaged_perceptron_tagger_eng')\n",
+        "\n",
+        "text = \"Natural language processing enables computers to understand human speech.\"\n",
+        "tokens = nltk.word_tokenize(text)\n",
+        "pos_tags = nltk.pos_tag(tokens)\n",
+        "\n",
+        "print(\"POS Tags:\", pos_tags)"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "0aQ2Q9m30LW1",
+        "outputId": "c8670c8d-6183-42a5-dd6c-defa48aba739"
+      },
+      "execution_count": 4,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stderr",
+          "text": [
+            "[nltk_data] Downloading package punkt_tab to /root/nltk_data...\n",
+            "[nltk_data]   Unzipping tokenizers/punkt_tab.zip.\n",
+            "[nltk_data] Downloading package averaged_perceptron_tagger_eng to\n",
+            "[nltk_data]     /root/nltk_data...\n",
+            "[nltk_data]   Unzipping taggers/averaged_perceptron_tagger_eng.zip.\n"
+          ]
+        },
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "POS Tags: [('Natural', 'JJ'), ('language', 'NN'), ('processing', 'NN'), ('enables', 'VBZ'), ('computers', 'NNS'), ('to', 'TO'), ('understand', 'VB'), ('human', 'JJ'), ('speech', 'NN'), ('.', '.')]\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "from collections import defaultdict, Counter\n",
+        "\n",
+        "# Training sentences: (word, tag)\n",
+        "train_data = [\n",
+        "    [(\"the\", \"DT\"), (\"dog\", \"NN\"), (\"barks\", \"VBZ\")],\n",
+        "    [(\"a\", \"DT\"), (\"cat\", \"NN\"), (\"runs\", \"VBZ\")],\n",
+        "    [(\"dogs\", \"NNS\"), (\"bark\", \"VBP\"), (\"loudly\", \"RB\")],\n",
+        "    [(\"the\", \"DT\"), (\"cat\", \"NN\"), (\"sleeps\", \"VBZ\")]\n",
+        "]\n",
+        "\n",
+        "word_tag_counts = defaultdict(Counter)\n",
+        "for sent in train_data:\n",
+        "    for word, tag in sent:\n",
+        "        word_tag_counts[word.lower()][tag] += 1\n",
+        "\n",
+        "def stochastic_tagger(sentence):\n",
+        "    tags = []\n",
+        "    for w in sentence.lower().split():\n",
+        "        if w in word_tag_counts:\n",
+        "            # Choose tag maximizing P(tag | word)\n",
+        "            best_tag = word_tag_counts[w].most_common(1)[0][0]\n",
+        "        else:\n",
+        "            best_tag = \"NN\"  # Most frequent fallback tag\n",
+        "        tags.append((w, best_tag))\n",
+        "    return tags\n",
+        "\n",
+        "print(stochastic_tagger(\"The dog sleeps loudly\"))"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "Kedf7GeY0Tsr",
+        "outputId": "f8c6973e-6c78-4e17-b2d5-ccb1362b7f5d"
+      },
+      "execution_count": 5,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "[('the', 'DT'), ('dog', 'NN'), ('sleeps', 'VBZ'), ('loudly', 'RB')]\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "import nltk\n",
+        "\n",
+        "patterns = [\n",
+        "    (r'.*ing$', 'VBG'),               # gerunds\n",
+        "    (r'.*ed$', 'VBD'),                # past tense verbs\n",
+        "    (r'.*es$', 'VBZ'),                # 3rd singular present\n",
+        "    (r'.*ly$', 'RB'),                 # adverbs\n",
+        "    (r'^-?[0-9]+(\\.[0-9]+)?$', 'CD'), # cardinal numbers\n",
+        "    (r'^(The|the|A|a|An|an)$', 'DT'), # determiners\n",
+        "    (r'.*s$', 'NNS'),                 # plural nouns\n",
+        "    (r'.*', 'NN')                     # default noun\n",
+        "]\n",
+        "\n",
+        "regexp_tagger = nltk.RegexpTagger(patterns)\n",
+        "sentence = \"The boys were running quickly after 2 dogs\".split()\n",
+        "print(regexp_tagger.tag(sentence))"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "3E8hy-l40Xul",
+        "outputId": "ceae8a69-ce90-4204-9d72-d0ab23567a19"
+      },
+      "execution_count": 6,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "[('The', 'DT'), ('boys', 'NNS'), ('were', 'NN'), ('running', 'VBG'), ('quickly', 'RB'), ('after', 'NN'), ('2', 'CD'), ('dogs', 'NNS')]\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "# Step 1: Initial baseline tagging (assign 'NN' to unknown words, 'TO' to 'to')\n",
+        "initial_tags = [(\"We\", \"PRP\"), (\"want\", \"VBP\"), (\"to\", \"TO\"), (\"race\", \"NN\"), (\"the\", \"DT\"), (\"car\", \"NN\")]\n",
+        "\n",
+        "# Step 2: Transformation rule -> Change 'NN' to 'VB' if the preceding tag is 'TO'\n",
+        "def apply_transformation_rules(tagged_sent):\n",
+        "    result = list(tagged_sent)\n",
+        "    for i in range(1, len(result)):\n",
+        "        word, tag = result[i]\n",
+        "        prev_word, prev_tag = result[i - 1]\n",
+        "        if tag == \"NN\" and prev_tag == \"TO\":\n",
+        "            result[i] = (word, \"VB\")\n",
+        "    return result\n",
+        "\n",
+        "print(\"Before rule:\", initial_tags)\n",
+        "print(\"After rule :\", apply_transformation_rules(initial_tags))"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "GAWd_9u60XoR",
+        "outputId": "b1080266-c39c-44c4-fe3e-a00df6158219"
+      },
+      "execution_count": 7,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Before rule: [('We', 'PRP'), ('want', 'VBP'), ('to', 'TO'), ('race', 'NN'), ('the', 'DT'), ('car', 'NN')]\n",
+            "After rule : [('We', 'PRP'), ('want', 'VBP'), ('to', 'TO'), ('race', 'VB'), ('the', 'DT'), ('car', 'NN')]\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "import nltk\n",
+        "\n",
+        "grammar = nltk.CFG.fromstring(\"\"\"\n",
+        "  S -> NP VP\n",
+        "  NP -> Det N\n",
+        "  VP -> V NP\n",
+        "  Det -> 'the' | 'a'\n",
+        "  N -> 'cat' | 'mouse'\n",
+        "  V -> 'chased' | 'saw'\n",
+        "\"\"\")\n",
+        "\n",
+        "parser = nltk.RecursiveDescentParser(grammar)\n",
+        "sentence = \"the cat chased a mouse\".split()\n",
+        "\n",
+        "for tree in parser.parse(sentence):\n",
+        "    print(tree)"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "T4G8O07408Ev",
+        "outputId": "e047494f-a2d7-40f1-f8bd-e24cc267631b"
+      },
+      "execution_count": 8,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "(S (NP (Det the) (N cat)) (VP (V chased) (NP (Det a) (N mouse))))\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "import nltk\n",
+        "\n",
+        "grammar = nltk.CFG.fromstring(\"\"\"\n",
+        "  S -> NP VP\n",
+        "  NP -> Det N | NP PP\n",
+        "  VP -> V NP | VP PP\n",
+        "  PP -> P NP\n",
+        "  Det -> 'the' | 'a'\n",
+        "  N -> 'man' | 'telescope' | 'park'\n",
+        "  V -> 'saw'\n",
+        "  P -> 'with' | 'in'\n",
+        "\"\"\")\n",
+        "\n",
+        "earley = nltk.EarleyChartParser(grammar)\n",
+        "sentence = \"the man saw a telescope in the park\".split()\n",
+        "\n",
+        "for tree in earley.parse(sentence):\n",
+        "    print(tree)"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "z-qCtY-o09t2",
+        "outputId": "9c24b462-d983-4ec3-9eee-136cb97fb95b"
+      },
+      "execution_count": 9,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "(S\n",
+            "  (NP (Det the) (N man))\n",
+            "  (VP\n",
+            "    (VP (V saw) (NP (Det a) (N telescope)))\n",
+            "    (PP (P in) (NP (Det the) (N park)))))\n",
+            "(S\n",
+            "  (NP (Det the) (N man))\n",
+            "  (VP\n",
+            "    (V saw)\n",
+            "    (NP\n",
+            "      (NP (Det a) (N telescope))\n",
+            "      (PP (P in) (NP (Det the) (N park))))))\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "import nltk\n",
+        "\n",
+        "grammar = nltk.CFG.fromstring(\"\"\"\n",
+        "  S -> NP VP\n",
+        "  NP -> Det Adj N | Det N\n",
+        "  VP -> V NP\n",
+        "  Det -> 'the'\n",
+        "  Adj -> 'quick' | 'brown'\n",
+        "  N -> 'fox' | 'dog'\n",
+        "  V -> 'jumps'\n",
+        "\"\"\")\n",
+        "\n",
+        "parser = nltk.ChartParser(grammar)\n",
+        "for tree in parser.parse(\"the quick brown fox jumps the dog\".split()):\n",
+        "    tree.pretty_print()"
+      ],
+      "metadata": {
+        "id": "JcXJdGkY1BBm"
+      },
+      "execution_count": 11,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "import nltk\n",
+        "\n",
+        "fcfg = nltk.grammar.FeatureGrammar.fromstring(\"\"\"\n",
+        "  % start S\n",
+        "  S -> NP[NUM=?n] VP[NUM=?n]\n",
+        "  NP[NUM=?n] -> Det[NUM=?n] N[NUM=?n]\n",
+        "  VP[NUM=?n] -> V[NUM=?n]\n",
+        "  Det[NUM=sg] -> 'this' | 'a'\n",
+        "  Det[NUM=pl] -> 'these'\n",
+        "  N[NUM=sg] -> 'dog'\n",
+        "  N[NUM=pl] -> 'dogs'\n",
+        "  V[NUM=sg] -> 'barks'\n",
+        "  V[NUM=pl] -> 'bark'\n",
+        "\"\"\")\n",
+        "\n",
+        "parser = nltk.parse.FeatureChartParser(fcfg)\n",
+        "\n",
+        "for sent in [\"this dog barks\", \"these dogs bark\", \"this dog bark\"]:\n",
+        "    trees = list(parser.parse(sent.split()))\n",
+        "    print(f\"'{sent}' -> {'Valid (Agreement OK)' if trees else 'Invalid (Agreement Error)'}\")"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "giwLEtoI1D1j",
+        "outputId": "e19b465d-900e-4d62-e0f2-94f01b651654"
+      },
+      "execution_count": 12,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "'this dog barks' -> Valid (Agreement OK)\n",
+            "'these dogs bark' -> Valid (Agreement OK)\n",
+            "'this dog bark' -> Invalid (Agreement Error)\n"
+          ]
+        }
+      ]
+    }
+  ]
+}
